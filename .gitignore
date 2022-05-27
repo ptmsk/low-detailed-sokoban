@@ -1,3 +1,6 @@
+# configuration folder
+.vscode/
 
+# executable and linking files
 main.exe
 main.o
