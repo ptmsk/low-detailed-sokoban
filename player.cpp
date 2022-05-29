@@ -20,9 +20,7 @@ void Player::update()
         {
             p_sprite.move(SPEED * direction);
         }
-            // p_sprite.move(SPEED * direction);
     }
-    std::cout << p_sprite.getPosition().x << ' ' << p_sprite.getPosition().y << std::endl;
 }
 
 void Player::setPosition(sf::Vector2f d)

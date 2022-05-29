@@ -5,6 +5,7 @@
 Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-sokoban"), player(), level() 
 {
     // window.setKeyRepeatEnabled(false);
+    window.setFramerateLimit(10);
 }
 
 void Game::processEvents()
