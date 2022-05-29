@@ -5,6 +5,7 @@
 const int SPRITESIZE = 64;
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;
+const float SPEED = 1.0f;
 
 // block
 const int GROUND = 0;
