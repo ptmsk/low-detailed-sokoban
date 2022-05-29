@@ -71,26 +71,29 @@ void Game::render()
 
 void Game::run()
 {
-    int l = 3;
-    level.loadLevel(l);
-
-    sf::Vector2u board_size = level.getSize();
-    float posx_board = WINDOW_WIDTH / 2 - board_size.x / 2.0f;
-    float posy_board = WINDOW_HEIGHT / 2 - board_size.y / 2.0f;
-    player.setOrigin(posx_board, posy_board);
-    sf::Vector2u player_position = level.getPlayerPosition();
-    player.setPosition(player_position);
-
-    while (window.isOpen())
+    for (int l = 1; l <= LEVEL_NUM; l++)
     {
-        processEvents();
-        update();
-        render();
+        // int l = 3;
+        level.loadLevel(l);
 
-        if (level.isFinished())
+        sf::Vector2u board_size = level.getSize();
+        float posx_board = WINDOW_WIDTH / 2 - board_size.x / 2.0f;
+        float posy_board = WINDOW_HEIGHT / 2 - board_size.y / 2.0f;
+        player.setOrigin(posx_board, posy_board);
+        sf::Vector2u player_position = level.getPlayerPosition();
+        player.setPosition(player_position);
+
+        while (window.isOpen())
         {
-            std::cout << "Level completed >:D\n";
-            window.close();
+            processEvents();
+            update();
+            render();
+
+            if (level.isFinished())
+            {
+                std::cout << "Level completed >:D\n";
+                break;
+            }
         }
     }
 }

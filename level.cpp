@@ -15,10 +15,19 @@ Level::~Level()
     for (int i = 0; i < width; i++)
         delete [] structure[i];
     delete [] structure;
+
+    std::cout << "level " << level << " is destroyed :(\n";
 }
 
 void Level::loadLevel(const int& level)
 {
+    if (structure != NULL)
+    {
+        for (int i = 0; i < width; i++)
+            delete [] structure[i];
+        delete [] structure;
+        missing_target = 0;
+    }
     this->level = level;
     std::ifstream file("assets/level/level" + std::to_string(level) + ".txt");
     std::string line;
