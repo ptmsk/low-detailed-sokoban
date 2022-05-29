@@ -1,6 +1,4 @@
 #include "level.h"
-#include "constant.h"
-#include <iostream>
 #include <fstream>
 #include <sstream>
 
@@ -39,6 +37,7 @@ void Level::loadLevel(const int& level)
             ss >> structure[i][j];
             if (structure[i][j] == PLAYER)
             {
+                structure[i][j] = GROUND;
                 player_position.x = j;
                 player_position.y = i;
             }
@@ -49,7 +48,7 @@ void Level::loadLevel(const int& level)
     file.close();
 }
 
-void Level::load()
+void Level::update()
 {
     float posx_board = WINDOW_WIDTH / 2 - width * SPRITESIZE / 2.0f;
     float posy_board = WINDOW_HEIGHT / 2 - height * SPRITESIZE / 2.0f;
@@ -98,4 +97,98 @@ void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
     //* draw the vertex array
     target.draw(l_vertices, states);
+}
+
+void Level::try2Move(Direction dir)
+{
+    int x = player_position.x;
+    int y = player_position.y;
+    if (dir == Direction::LEFT)
+    {
+        if (x > 0 && (structure[y][x - 1] == GROUND || structure[y][x - 1] == TARGET))
+            // move to left
+            player_position -= sf::Vector2u(1, 0);
+        else if (x > 1 && (structure[y][x - 1] == BOX || structure[y][x - 1] == TARGET_FILLED) &&
+                (structure[y][x - 2] == GROUND || structure[y][x - 2] == TARGET))
+        {
+            // move and push the box to left
+            if (structure[y][x - 1] == TARGET_FILLED)
+                structure[y][x - 1] = TARGET;
+            else
+                structure[y][x - 1] = GROUND;
+
+            if (structure[y][x - 2] == GROUND)
+                structure[y][x - 2] = BOX;
+            else
+                structure[y][x - 2] = TARGET_FILLED;
+
+            player_position -= sf::Vector2u(1, 0);
+        }
+    }
+    else if (dir == Direction::RIGHT)
+    {
+        if (x + 1 < width && (structure[y][x + 1] == GROUND || structure[y][x + 1] == TARGET))
+            // move to right
+            player_position += sf::Vector2u(1, 0);
+        else if (x + 2 < width && (structure[y][x + 1] == BOX || structure[y][x + 1] == TARGET_FILLED) &&
+                (structure[y][x + 2] == GROUND || structure[y][x + 2] == TARGET))
+        {
+            // move and push the box to right
+            if (structure[y][x + 1] == TARGET_FILLED)
+                structure[y][x + 1] = TARGET;
+            else
+                structure[y][x + 1] = GROUND;
+
+            if (structure[y][x + 2] == GROUND)
+                structure[y][x + 2] = BOX;
+            else
+                structure[y][x + 2] = TARGET_FILLED;
+
+            player_position += sf::Vector2u(1, 0);
+        }
+    }
+    else if (dir == Direction::UP)
+    {
+        if (y > 0 && (structure[y - 1][x] == GROUND || structure[y - 1][x] == TARGET))
+            // move up
+            player_position -= sf::Vector2u(0, 1);
+        else if (y > 1 && (structure[y - 1][x] == BOX || structure[y - 1][x] == TARGET_FILLED) &&
+                (structure[y - 2][x] == GROUND || structure[y - 2][x] == TARGET))
+        {
+            // move and push the box up
+            if (structure[y - 1][x] == TARGET_FILLED)
+                structure[y - 1][x] = TARGET;
+            else
+                structure[y - 1][x] = GROUND;
+
+            if (structure[y - 2][x] == GROUND)
+                structure[y - 2][x] = BOX;
+            else
+                structure[y - 2][x] = TARGET_FILLED;
+
+            player_position -= sf::Vector2u(0, 1);
+        }
+    }
+    else if (dir == Direction::DOWN)
+    {
+        if (y + 1 < height && (structure[y + 1][x] == GROUND || structure[y + 1][x] == TARGET))
+            // move down
+            player_position += sf::Vector2u(0, 1);
+        else if (y + 2 < height && (structure[y + 1][x] == BOX || structure[y + 1][x] == TARGET_FILLED) &&
+                (structure[y + 2][x] == GROUND || structure[y + 2][x] == TARGET))
+        {
+            // move and push the box down
+            if (structure[y + 1][x] == TARGET_FILLED)
+                structure[y + 1][x] = TARGET;
+            else
+                structure[y + 1][x] = GROUND;
+
+            if (structure[y + 2][x] == GROUND)
+                structure[y + 2][x] = BOX;
+            else
+                structure[y + 2][x] = TARGET_FILLED;
+
+            player_position += sf::Vector2u(0, 1);
+        }
+    }
 }

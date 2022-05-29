@@ -10,20 +10,13 @@ Player::Player() : direction(sf::Vector2f(0.0, 0.0))
     p_sprite.setTextureRect(sf::IntRect(64, 0, SPRITESIZE, SPRITESIZE));
 }
 
-void Player::update()
+void Player::update(Level& level)
 {
-    if (isMoving)
-    {
-        sf::Vector2f p_pos = p_sprite.getPosition() + SPEED * direction;
-        if (p_pos.x >= SPRITESIZE && p_pos.x <= 8 * 64 - 2 * SPRITESIZE && 
-            p_pos.y >= SPRITESIZE && p_pos.y <= 8 * 64 - 2 * SPRITESIZE)
-        {
-            p_sprite.move(SPEED * direction);
-        }
-    }
+    sf::Vector2u pos = level.getPlayerPosition();
+    p_sprite.setPosition(sf::Vector2f(pos.x * SPRITESIZE, pos.y * SPRITESIZE));
 }
 
-void Player::setPosition(sf::Vector2f d)
+void Player::setPosition(sf::Vector2u d)
 {
     p_sprite.setPosition(d.x * SPRITESIZE, d.y * SPRITESIZE);
 }

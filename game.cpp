@@ -5,7 +5,7 @@
 Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-sokoban"), player(), level() 
 {
     // window.setKeyRepeatEnabled(false);
-    window.setFramerateLimit(10);
+    // window.setFramerateLimit(100);
 }
 
 void Game::processEvents()
@@ -22,40 +22,41 @@ void Game::processEvents()
             else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
             {
                 std::cout << "Up" << std::endl;
-                player.isMoving = true;
+                level.try2Move(Direction::UP);
                 player.setDirection(sf::Vector2f(0.0, -1.0));
                 player.setSprite(Direction::UP);
             }
             else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
             {
                 std::cout << "Down" << std::endl;
-                player.isMoving = true;
+                level.try2Move(Direction::DOWN);
                 player.setDirection(sf::Vector2f(0.0, 1.0));
                 player.setSprite(Direction::DOWN);
             }
             else if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A)
             {
                 std::cout << "Left" << std::endl;
-                player.isMoving = true;
+                level.try2Move(Direction::LEFT);
                 player.setDirection(sf::Vector2f(-1.0, 0.0));
                 player.setSprite(Direction::LEFT);
             }
             else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D)
             {
                 std::cout << "Right" << std::endl;
-                player.isMoving = true;
+                level.try2Move(Direction::RIGHT);
                 player.setDirection(sf::Vector2f(1.0, 0.0));
                 player.setSprite(Direction::RIGHT);
             }
         }
         else if (event.type = sf::Event::KeyReleased)
-            player.isMoving = false;
+            std::cout << "Waiting...\n";
     }
 }
 
 void Game::update()
 {
-    player.update();
+    level.update();
+    player.update(level);
 }
 
 void Game::render()
@@ -72,13 +73,12 @@ void Game::run()
 {
     int l = 3;
     level.loadLevel(l);
-    level.load();
 
-    sf::Vector2f board_size = level.getSize();
+    sf::Vector2u board_size = level.getSize();
     float posx_board = WINDOW_WIDTH / 2 - board_size.x / 2.0f;
     float posy_board = WINDOW_HEIGHT / 2 - board_size.y / 2.0f;
     player.setOrigin(posx_board, posy_board);
-    sf::Vector2f player_position = level.getPlayerPosition();
+    sf::Vector2u player_position = level.getPlayerPosition();
     player.setPosition(player_position);
 
     while (window.isOpen())

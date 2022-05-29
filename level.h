@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include "constant.h"
 
 class Level : public sf::Drawable, public sf::Transformable
 {
@@ -13,7 +14,7 @@ class Level : public sf::Drawable, public sf::Transformable
         int height;
         sf::Texture texture;
         sf::VertexArray l_vertices;
-        sf::Vector2f player_position;
+        sf::Vector2u player_position;
     
     public:
         Level(const Level&) = delete;
@@ -21,10 +22,11 @@ class Level : public sf::Drawable, public sf::Transformable
         Level();
         ~Level();
         void loadLevel(const int& level);
-        void load();
+        void update();
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-        sf::Vector2f getPlayerPosition() { return player_position; }
-        sf::Vector2f getSize() { return float(SPRITESIZE) * sf::Vector2f(width, height); }
+        sf::Vector2u getPlayerPosition() { return player_position; }
+        sf::Vector2u getSize() { return sf::Vector2u(SPRITESIZE * width, SPRITESIZE * height); }
+        void try2Move(Direction dir);
 };
 
 #endif
