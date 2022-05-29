@@ -12,6 +12,13 @@ Level::Level() : structure(NULL), level(0), width(0), height(0)
     l_vertices.setPrimitiveType(sf::Quads);
 }
 
+Level::~Level()
+{
+    for (int i = 0; i < width; i++)
+        delete [] structure[i];
+    delete [] structure;
+}
+
 void Level::loadLevel(const int& level)
 {
     this->level = level;
@@ -44,6 +51,8 @@ void Level::loadLevel(const int& level)
 
 void Level::load()
 {
+    float posx_board = WINDOW_WIDTH / 2 - width * SPRITESIZE / 2.0f;
+    float posy_board = WINDOW_HEIGHT / 2 - height * SPRITESIZE / 2.0f;
     l_vertices.resize(width * height * 4);
 
     for (int i = 0; i < height; i++)
@@ -64,10 +73,10 @@ void Level::load()
             sf::Vertex *quad = &l_vertices[(i + j * width) * 4];
 
             // define 4 corners
-            quad[0].position = sf::Vector2f(i * SPRITESIZE, j * SPRITESIZE);
-            quad[1].position = sf::Vector2f((i + 1) * SPRITESIZE, j * SPRITESIZE);
-            quad[2].position = sf::Vector2f((i + 1) * SPRITESIZE, (j + 1) * SPRITESIZE);
-            quad[3].position = sf::Vector2f(i * SPRITESIZE, (j + 1) * SPRITESIZE);
+            quad[0].position = sf::Vector2f(i * SPRITESIZE + posx_board, j * SPRITESIZE + posy_board);
+            quad[1].position = sf::Vector2f((i + 1) * SPRITESIZE + posx_board, j * SPRITESIZE + posy_board);
+            quad[2].position = sf::Vector2f((i + 1) * SPRITESIZE + posx_board, (j + 1) * SPRITESIZE + posy_board);
+            quad[3].position = sf::Vector2f(i * SPRITESIZE + posx_board, (j + 1) * SPRITESIZE + posy_board);
 
 
             // define its 4 texture coordinates

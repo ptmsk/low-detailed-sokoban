@@ -13,18 +13,18 @@ class Level : public sf::Drawable, public sf::Transformable
         int height;
         sf::Texture texture;
         sf::VertexArray l_vertices;
-        sf::Vector2u player_position;
+        sf::Vector2f player_position;
     
     public:
         Level(const Level&) = delete;
         Level& operator=(const Level&) = delete;
         Level();
+        ~Level();
         void loadLevel(const int& level);
         void load();
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-        sf::Vector2u getPlayerPosition() { return player_position; }
-        void setPosition(int x, int y);
-        void setTextureRect(int x, int y);
+        sf::Vector2f getPlayerPosition() { return player_position; }
+        sf::Vector2f getSize() { return float(SPRITESIZE) * sf::Vector2f(width, height); }
 };
 
 #endif
