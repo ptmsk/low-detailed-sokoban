@@ -2,7 +2,10 @@
 #include "constant.h"
 #include <iostream>
 
-Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "test"), player(), level() {}
+Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-sokoban"), player(), level() 
+{
+    // window.setKeyRepeatEnabled(false);
+}
 
 void Game::processEvents()
 {
@@ -56,24 +59,27 @@ void Game::update()
 
 void Game::render()
 {
-    window.clear();
+    window.clear(sf::Color(55, 138, 138, 1));
 
-    /*
-    * draw here
-    */
-   window.draw(level);
-   window.draw(player);
+    window.draw(level);
+    window.draw(player);
 
-   window.display();
+    window.display();
 }
 
 void Game::run()
 {
-    int l = 1;
+    int l = 3;
     level.loadLevel(l);
     level.load();
-    sf::Vector2u player_position = level.getPlayerPosition();
+
+    sf::Vector2f board_size = level.getSize();
+    float posx_board = WINDOW_WIDTH / 2 - board_size.x / 2.0f;
+    float posy_board = WINDOW_HEIGHT / 2 - board_size.y / 2.0f;
+    player.setOrigin(posx_board, posy_board);
+    sf::Vector2f player_position = level.getPlayerPosition();
     player.setPosition(player_position);
+
     while (window.isOpen())
     {
         processEvents();

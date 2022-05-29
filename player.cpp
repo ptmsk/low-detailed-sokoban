@@ -13,10 +13,19 @@ Player::Player() : direction(sf::Vector2f(0.0, 0.0))
 void Player::update()
 {
     if (isMoving)
-        p_sprite.move(2.0f * direction);
+    {
+        sf::Vector2f p_pos = p_sprite.getPosition() + SPEED * direction;
+        if (p_pos.x >= SPRITESIZE && p_pos.x <= 8 * 64 - 2 * SPRITESIZE && 
+            p_pos.y >= SPRITESIZE && p_pos.y <= 8 * 64 - 2 * SPRITESIZE)
+        {
+            p_sprite.move(SPEED * direction);
+        }
+            // p_sprite.move(SPEED * direction);
+    }
+    std::cout << p_sprite.getPosition().x << ' ' << p_sprite.getPosition().y << std::endl;
 }
 
-void Player::setPosition(sf::Vector2u d)
+void Player::setPosition(sf::Vector2f d)
 {
     p_sprite.setPosition(d.x * SPRITESIZE, d.y * SPRITESIZE);
 }
