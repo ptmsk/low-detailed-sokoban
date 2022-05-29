@@ -12,6 +12,7 @@ class Level : public sf::Drawable, public sf::Transformable
         int level;
         int width;
         int height;
+        int missing_target;
         sf::Texture texture;
         sf::VertexArray l_vertices;
         sf::Vector2u player_position;
@@ -27,6 +28,7 @@ class Level : public sf::Drawable, public sf::Transformable
         sf::Vector2u getPlayerPosition() { return player_position; }
         sf::Vector2u getSize() { return sf::Vector2u(SPRITESIZE * width, SPRITESIZE * height); }
         void try2Move(Direction dir);
+        bool isFinished() { return missing_target == 0; }
 };
 
 #endif

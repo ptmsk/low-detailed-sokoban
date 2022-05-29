@@ -86,5 +86,11 @@ void Game::run()
         processEvents();
         update();
         render();
+
+        if (level.isFinished())
+        {
+            std::cout << "Level completed >:D\n";
+            window.close();
+        }
     }
 }
