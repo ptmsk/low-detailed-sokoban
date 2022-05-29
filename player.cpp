@@ -13,7 +13,12 @@ Player::Player() : direction(sf::Vector2f(0.0, 0.0))
 void Player::update()
 {
     if (isMoving)
-        p_sprite.move(direction);
+        p_sprite.move(2.0f * direction);
+}
+
+void Player::setPosition(sf::Vector2u d)
+{
+    p_sprite.setPosition(d.x * SPRITESIZE, d.y * SPRITESIZE);
 }
 
 void Player::setDirection(sf::Vector2f d)

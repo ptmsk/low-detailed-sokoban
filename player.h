@@ -25,6 +25,7 @@ class Player : public sf::Drawable
 
         void update();
         bool isMoving;
+        void setPosition(sf::Vector2u d);
         void setDirection(sf::Vector2f d);
         void setSprite(Direction dir);
 
