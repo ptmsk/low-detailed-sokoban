@@ -2,8 +2,7 @@
 #include "constant.h"
 #include <iostream>
 
-Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "test"), player()
-{}
+Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "test"), player(), level() {}
 
 void Game::processEvents()
 {
@@ -62,7 +61,7 @@ void Game::render()
     /*
     * draw here
     */
-   
+   window.draw(level);
    window.draw(player);
 
    window.display();
@@ -70,6 +69,11 @@ void Game::render()
 
 void Game::run()
 {
+    int l = 1;
+    level.loadLevel(l);
+    level.load();
+    sf::Vector2u player_position = level.getPlayerPosition();
+    player.setPosition(player_position);
     while (window.isOpen())
     {
         processEvents();

@@ -2,11 +2,13 @@
 #define GAME_H_
 #include <SFML/Graphics.hpp>
 #include "player.cpp"
+#include "level.cpp"
 
 class Game 
 {
     private:
         sf::RenderWindow window;
+        Level level;
         Player player;
 
         void processEvents();

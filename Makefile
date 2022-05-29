@@ -1,6 +1,6 @@
 all: compile link
 
-compile:
+compile:	
 	g++ -Isrc/include -c main.cpp
 
 link:
