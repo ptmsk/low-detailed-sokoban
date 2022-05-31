@@ -20,9 +20,9 @@ class Player : public sf::Drawable
         void update(Level &level);
         void setOrigin(float x, float y) { p_sprite.setOrigin(-x, -y); }
         void setPosition(sf::Vector2u d);
-        sf::Vector2f getPosition() { return p_sprite.getPosition(); }
+        const sf::Vector2f& getPosition() const { return p_sprite.getPosition(); }
         void setDirection(sf::Vector2f d);
-        sf::Vector2f getDirection() { return direction; }
+        const sf::Vector2f& getDirection() const { return direction; }
         void setSprite(Direction dir);
 };
 

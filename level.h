@@ -25,8 +25,8 @@ class Level : public sf::Drawable, public sf::Transformable
         void loadLevel(const int& level);
         void update();
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-        sf::Vector2u getPlayerPosition() { return player_position; }
-        sf::Vector2u getSize() { return sf::Vector2u(SPRITESIZE * width, SPRITESIZE * height); }
+        const sf::Vector2u& getPlayerPosition() const { return player_position; }
+        const sf::Vector2u getSize() const { return sf::Vector2u(SPRITESIZE * width, SPRITESIZE * height); }
         void try2Move(Direction dir);
         bool isFinished() { return missing_target == 0; }
 };
