@@ -8,6 +8,8 @@ class Game
 {
     private:
         sf::RenderWindow window;
+        sf::Font font;
+        sf::Text title;
         Level level;
         Player player;
 

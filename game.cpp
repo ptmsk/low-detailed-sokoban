@@ -6,6 +6,17 @@ Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-
 {
     // window.setKeyRepeatEnabled(false);
     // window.setFramerateLimit(100);
+    // sf::Font font;
+    if (!font.loadFromFile("assets/font/arial.ttf"))
+        std::cout << "font can't be loaded\n";
+
+    title.setFont(font);
+    title.setFillColor(sf::Color(215, 88, 74));
+    title.setOutlineColor(sf::Color::Black);
+    title.setStyle(sf::Text::Bold);
+    title.setCharacterSize(32);
+    title.setPosition(0, 0);
+    
 }
 
 void Game::processEvents()
@@ -63,6 +74,7 @@ void Game::render()
 {
     window.clear(sf::Color(55, 138, 138, 1));
 
+    window.draw(title);
     window.draw(level);
     window.draw(player);
 
@@ -70,11 +82,12 @@ void Game::render()
 }
 
 void Game::run()
-{
+{   
     for (int l = 1; l <= LEVEL_NUM; l++)
     {
-        // int l = 3;
         level.loadLevel(l);
+
+        title.setString("LEVEL " + std::to_string(l));
 
         sf::Vector2u board_size = level.getSize();
         float posx_board = WINDOW_WIDTH / 2 - board_size.x / 2.0f;
