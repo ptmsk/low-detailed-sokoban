@@ -2,13 +2,9 @@
 #include "constant.h"
 #include <iostream>
 
-Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-sokoban"), player(), level() 
+Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-sokoban"), status(Status::Normal), player(), level() 
 {
-    // window.setKeyRepeatEnabled(false);
-    // window.setFramerateLimit(100);
-    // sf::Font font;
-    if (!font.loadFromFile("assets/font/arial.ttf"))
-        std::cout << "font can't be loaded\n";
+    font.loadFromFile("assets/font/arial.ttf");
 
     title.setFont(font);
     title.setFillColor(sf::Color(255, 88, 74));
@@ -16,7 +12,25 @@ Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-
     title.setStyle(sf::Text::Bold);
     title.setCharacterSize(32);
     title.setPosition(0, 0);
-    
+
+    Button exit = Button("Exit");
+    Button play_again = Button("Play Again");
+    Button next_level = Button("Next level");
+    buttons.push_back(exit);
+    buttons.push_back(play_again);
+    buttons.push_back(next_level);
+
+    sf::Vector2f exit_size = buttons[0].getSize();
+    sf::Vector2f again_size = buttons[1].getSize();
+    sf::Vector2f next_size = buttons[2].getSize();
+
+    std::cout << exit_size.x << ' ' << exit_size.y << std::endl;
+    std::cout << again_size.x << ' ' << again_size.y << std::endl;
+    std::cout << next_size.x << ' ' << next_size.y << std::endl;
+
+    buttons[0].setPosition(15, WINDOW_HEIGHT - 100);
+    buttons[1].setPosition(30 + exit_size.x, WINDOW_HEIGHT - 100);
+    buttons[2].setPosition(45 + exit_size.x + again_size.x, WINDOW_HEIGHT - 100);
 }
 
 void Game::processEvents()
@@ -26,11 +40,9 @@ void Game::processEvents()
     {
         if (event.type == sf::Event::Closed)
             window.close();
-        else if (event.type == sf::Event::KeyPressed)
+        else if (event.type == sf::Event::KeyPressed && !level.isFinished())
         {
-            if (event.key.code == sf::Keyboard::Escape)
-                window.close();
-            else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
+            if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
             {
                 level.try2Move(Direction::UP);
                 player.setDirection(sf::Vector2f(0.0, -1.0));
@@ -55,8 +67,17 @@ void Game::processEvents()
                 player.setSprite(Direction::RIGHT);
             }
         }
-        // else if (event.type = sf::Event::KeyReleased)
-        //     continue;
+        else if (event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved)
+        {
+            for (int i = 0; i < BUTTON_NUM - 1; i++)
+            {
+                if (buttons[i].processEvent(event))
+                    status = Status(i);
+            }
+            
+            if (level.isFinished() && buttons[BUTTON_NUM - 1].processEvent(event))
+                status = Status::Next;
+        }
     }
 }
 
@@ -73,6 +94,12 @@ void Game::render()
     window.draw(title);
     window.draw(level);
     window.draw(player);
+    
+    for (int i = 0; i < BUTTON_NUM - 1; i++)
+        window.draw(buttons[i]);
+
+    if (level.isFinished())
+        window.draw(buttons[BUTTON_NUM - 1]);
 
     window.display();
 }
@@ -81,6 +108,7 @@ void Game::run()
 {   
     for (int l = 1; l <= LEVEL_NUM; l++)
     {
+        status = Status::Normal;
         level.loadLevel(l);
 
         title.setString("LEVEL " + std::to_string(l));
@@ -98,9 +126,17 @@ void Game::run()
             update();
             render();
 
-            if (level.isFinished())
+            if (status == Status::Closed)
+                window.close();
+            else if (status == Status::Again)
             {
-                std::cout << "Level " << l << " completed >:D\n";
+                l--;
+                std::cout << "Play again\n";
+                break;
+            }
+            else if (status == Status::Next)
+            {
+                std::cout << "Next Level\n";
                 break;
             }
         }
