@@ -5,7 +5,7 @@
 const int SPRITESIZE = 64;
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;
-const int LEVEL_NUM = 3;
+const int LEVEL_NUM = 20;
 
 // block
 const int GROUND = 0;
