@@ -10,7 +10,7 @@ Level::Level() : structure(NULL), level(0), width(0), height(0), missing_target(
 
 Level::~Level()
 {
-    for (int i = 0; i < width; i++)
+    for (int i = 0; i < height; i++)
         delete [] structure[i];
     delete [] structure;
 
@@ -21,7 +21,7 @@ void Level::loadLevel(const int& level)
 {
     if (structure != NULL)
     {
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < height; i++)
             delete [] structure[i];
         delete [] structure;
         missing_target = 0;
@@ -31,8 +31,8 @@ void Level::loadLevel(const int& level)
     std::string line;
     std::getline(file, line);
     std::stringstream ss(line);
-    ss >> width;
     ss >> height;
+    ss >> width;
     structure = new int*[height];
     for (int i = 0; i < height; i++)
     {
@@ -61,10 +61,9 @@ void Level::update()
     float posx_board = WINDOW_WIDTH / 2 - width * SPRITESIZE / 2.0f;
     float posy_board = WINDOW_HEIGHT / 2 - height * SPRITESIZE / 2.0f;
     l_vertices.resize(width * height * 4);
-
-    for (int i = 0; i < height; i++)
+    for (int i = 0; i < width; i++)
     {
-        for (int j = 0; j < width; j++)
+        for (int j = 0; j < height; j++)
         {
             // get the current tile number
             int tileNumber = structure[j][i];

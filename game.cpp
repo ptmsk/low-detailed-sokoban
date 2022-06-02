@@ -7,11 +7,9 @@ Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-
     font.loadFromFile("assets/font/arial.ttf");
 
     title.setFont(font);
-    title.setFillColor(sf::Color(255, 88, 74));
     title.setOutlineColor(sf::Color::Black);
     title.setStyle(sf::Text::Bold);
     title.setCharacterSize(32);
-    title.setPosition(0, 0);
 
     Button exit = Button("Exit");
     Button play_again = Button("Play Again");
@@ -24,13 +22,9 @@ Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-
     sf::Vector2f again_size = buttons[1].getSize();
     sf::Vector2f next_size = buttons[2].getSize();
 
-    std::cout << exit_size.x << ' ' << exit_size.y << std::endl;
-    std::cout << again_size.x << ' ' << again_size.y << std::endl;
-    std::cout << next_size.x << ' ' << next_size.y << std::endl;
-
-    buttons[0].setPosition(15, WINDOW_HEIGHT - 100);
-    buttons[1].setPosition(30 + exit_size.x, WINDOW_HEIGHT - 100);
-    buttons[2].setPosition(45 + exit_size.x + again_size.x, WINDOW_HEIGHT - 100);
+    buttons[0].setPosition(15, WINDOW_HEIGHT - 70);
+    buttons[1].setPosition(30 + exit_size.x, WINDOW_HEIGHT - 70);
+    buttons[2].setPosition(45 + exit_size.x + again_size.x, WINDOW_HEIGHT - 70);
 }
 
 void Game::processEvents()
@@ -91,15 +85,20 @@ void Game::render()
 {
     window.clear(sf::Color(55, 138, 138, 1));
 
-    window.draw(title);
-    window.draw(level);
-    window.draw(player);
-    
     for (int i = 0; i < BUTTON_NUM - 1; i++)
         window.draw(buttons[i]);
 
     if (level.isFinished())
+    {
+        title.setString("LEVEL " + std::to_string(level.getLevel()) + " - COMPLETED");
+        title.setFillColor(sf::Color::Yellow); 
+        
         window.draw(buttons[BUTTON_NUM - 1]);
+    }
+
+    window.draw(title);
+    window.draw(level);
+    window.draw(player);
 
     window.display();
 }
@@ -112,6 +111,7 @@ void Game::run()
         level.loadLevel(l);
 
         title.setString("LEVEL " + std::to_string(l));
+        title.setFillColor(sf::Color(255, 88, 74));
 
         sf::Vector2u board_size = level.getSize();
         float posx_board = WINDOW_WIDTH / 2 - board_size.x / 2.0f;

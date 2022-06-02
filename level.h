@@ -22,6 +22,7 @@ class Level : public sf::Drawable, public sf::Transformable
         Level& operator=(const Level&) = delete;
         Level();
         ~Level();
+        int getLevel() const { return level; }
         void loadLevel(const int& level);
         void update();
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
