@@ -4,9 +4,7 @@
 
 Level::Level() : structure(NULL), level(0), width(0), height(0), missing_target(0)
 {
-    if (!texture.loadFromFile("assets/images/structure.png"))
-        std::cout << "structure texture cannot load image.\n";
-    
+    texture.loadFromFile("assets/images/structure.png");
     l_vertices.setPrimitiveType(sf::Quads);
 }
 
@@ -16,7 +14,7 @@ Level::~Level()
         delete [] structure[i];
     delete [] structure;
 
-    std::cout << "level " << level << " is destroyed :(\n";
+    std::cout << "Thanks for playing! Well Player :D";
 }
 
 void Level::loadLevel(const int& level)
