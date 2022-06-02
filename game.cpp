@@ -11,7 +11,7 @@ Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-
         std::cout << "font can't be loaded\n";
 
     title.setFont(font);
-    title.setFillColor(sf::Color(215, 88, 74));
+    title.setFillColor(sf::Color(255, 88, 74));
     title.setOutlineColor(sf::Color::Black);
     title.setStyle(sf::Text::Bold);
     title.setCharacterSize(32);
@@ -32,35 +32,31 @@ void Game::processEvents()
                 window.close();
             else if (event.key.code == sf::Keyboard::Up || event.key.code == sf::Keyboard::W)
             {
-                std::cout << "Up" << std::endl;
                 level.try2Move(Direction::UP);
                 player.setDirection(sf::Vector2f(0.0, -1.0));
                 player.setSprite(Direction::UP);
             }
             else if (event.key.code == sf::Keyboard::Down || event.key.code == sf::Keyboard::S)
             {
-                std::cout << "Down" << std::endl;
                 level.try2Move(Direction::DOWN);
                 player.setDirection(sf::Vector2f(0.0, 1.0));
                 player.setSprite(Direction::DOWN);
             }
             else if (event.key.code == sf::Keyboard::Left || event.key.code == sf::Keyboard::A)
             {
-                std::cout << "Left" << std::endl;
                 level.try2Move(Direction::LEFT);
                 player.setDirection(sf::Vector2f(-1.0, 0.0));
                 player.setSprite(Direction::LEFT);
             }
             else if (event.key.code == sf::Keyboard::Right || event.key.code == sf::Keyboard::D)
             {
-                std::cout << "Right" << std::endl;
                 level.try2Move(Direction::RIGHT);
                 player.setDirection(sf::Vector2f(1.0, 0.0));
                 player.setSprite(Direction::RIGHT);
             }
         }
-        else if (event.type = sf::Event::KeyReleased)
-            std::cout << "Waiting...\n";
+        // else if (event.type = sf::Event::KeyReleased)
+        //     continue;
     }
 }
 
@@ -104,7 +100,7 @@ void Game::run()
 
             if (level.isFinished())
             {
-                std::cout << "Level completed >:D\n";
+                std::cout << "Level " << l << " completed >:D\n";
                 break;
             }
         }

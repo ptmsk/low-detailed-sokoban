@@ -2,13 +2,25 @@
 #include "menu.h"
 #include "constant.h"
 
-Menu::Menu(): selectedItemIndex(0)
+Menu::Menu(): selectedItemIndex(-1)
 {
     if (!font.loadFromFile("assets/font/arial.ttf"))
     {
         std::cout << "font can't be loaded!\n";
     }
 
+    title.setFont(font);
+    title.setCharacterSize(100);
+    title.setFillColor(sf::Color(255, 88, 74));
+    title.setOutlineColor(sf::Color::Black);
+    title.setStyle(sf::Text::Bold);
+    title.setString("SOKOBAN");
+
+    sf::FloatRect rect = title.getGlobalBounds();
+    float posx_title = WINDOW_WIDTH / 2.0f - rect.width / 2.0f;
+    float posy_title = (WINDOW_HEIGHT / 2.0f - rect.height / 2.0f) / (MAX_NUMBER_OF_ITEMS + 2) * 1.5f;
+    title.setPosition(posx_title, posy_title);
+    
     std::string string[MAX_NUMBER_OF_ITEMS] = { "PLAY", "INSTRUCTION", "EXIT" };
     sf::Color color = sf::Color::White;
     for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++)
@@ -20,7 +32,8 @@ void Menu::setOption(int opt_num, sf::Color& color, const std::string& string)
 {
     options[opt_num].setFont(font);
     options[opt_num].setFillColor(color);
-    options[opt_num].setOutlineColor(color);
+    options[opt_num].setOutlineColor(sf::Color::Black);
+    options[opt_num].setCharacterSize(32);
     options[opt_num].setString(string);
 
     sf::FloatRect rect = options[opt_num].getGlobalBounds();
@@ -28,38 +41,49 @@ void Menu::setOption(int opt_num, sf::Color& color, const std::string& string)
     float posx = WINDOW_WIDTH / 2.0f -  rect.width / 2;
     float posy = WINDOW_HEIGHT / 2.0f - rect.height / 2;
     options[opt_num].setStyle(sf::Text::Bold);
-    options[opt_num].setPosition(sf::Vector2f(posx, WINDOW_HEIGHT / (MAX_NUMBER_OF_ITEMS + 1.0) * (opt_num + 1)));
+    options[opt_num].setPosition(sf::Vector2f(posx, WINDOW_HEIGHT / (MAX_NUMBER_OF_ITEMS + 2.0) * (opt_num + 2)));
+}
+
+bool Menu::processEvent(sf::Event& event)
+{
+    bool res = false;
+    for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++)
+    {
+        if (event.type == sf::Event::MouseButtonReleased)
+        {
+            sf::FloatRect rect = options[i].getGlobalBounds();
+            if (rect.contains(event.mouseButton.x, event.mouseButton.y))
+            {
+                selectedItemIndex = i;
+                res = true;
+            }
+        }
+        else if (event.type == sf::Event::MouseMoved)
+        {
+            sf::FloatRect rect = options[i].getGlobalBounds();
+            int old_selectedItemIndex = selectedItemIndex;
+
+            const sf::Vector2f mouse_pos(event.mouseMove.x, event.mouseMove.y);
+            if (rect.contains(mouse_pos))
+                selectedItemIndex = i;
+            if (selectedItemIndex != -1 && old_selectedItemIndex == -1)
+                options[selectedItemIndex].setFillColor(sf::Color::Yellow);
+            else if (old_selectedItemIndex != selectedItemIndex)
+            {
+                options[old_selectedItemIndex].setFillColor(sf::Color::White);
+                options[selectedItemIndex].setFillColor(sf::Color::Yellow);
+            }
+        }
+    }
+    return res;
 }
 
 void Menu::draw(sf::RenderWindow& window)
 {
+    window.draw(title);
+
     for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++)
         window.draw(options[i]);
-}
-
-void Menu::moveUp()
-{
-    if (selectedItemIndex - 1 >= 0)
-    {
-        options[selectedItemIndex].setFillColor(sf::Color::White);
-        options[selectedItemIndex].setOutlineColor(sf::Color::White);
-
-        selectedItemIndex--;
-        options[selectedItemIndex].setFillColor(sf::Color::Red);
-        options[selectedItemIndex].setOutlineColor(sf::Color::Red);
-    }
-}
-
-void Menu::moveDown()
-{
-    if (selectedItemIndex + 1 < MAX_NUMBER_OF_ITEMS)
-    {
-        options[selectedItemIndex].setFillColor(sf::Color::White);
-        options[selectedItemIndex].setOutlineColor(sf::Color::White);
-        selectedItemIndex++;
-        options[selectedItemIndex].setFillColor(sf::Color::Red);
-        options[selectedItemIndex].setOutlineColor(sf::Color::Red);
-    }
 }
 
 int Menu::run()
@@ -73,48 +97,13 @@ int Menu::run()
 
 		while (window.pollEvent(event))
 		{
-			switch (event.type)
-			{
-			case sf::Event::KeyReleased:
-				switch (event.key.code)
-				{
-				case sf::Keyboard::Up:
-					moveUp();
-					break;
-
-				case sf::Keyboard::Down:
-					moveDown();
-					break;
-
-				case sf::Keyboard::Return:
-					// switch (GetPressedItem())
-					// {
-					// case 0:
-					// 	std::cout << "Play button has been pressed" << std::endl;
-					// 	break;
-					// case 1:
-					// 	std::cout << "Option button has been pressed" << std::endl;
-					// 	break;
-					// case 2:
-					// 	window.close();
-					// 	break;
-					// }
-                    if (GetPressedItem() <= 2)
-                    {
-                        opt = GetPressedItem();
-                        window.close();
-                    }
-
-					break;
-				}
-
-				break;
-			case sf::Event::Closed:
-				window.close();
-
-				break;
-
-			}
+            if (event.type == sf::Event::Closed)
+                window.close();
+            else if (processEvent(event) == true)
+            {
+                opt = selectedItemIndex;
+                window.close();
+            }
 		}
 
 		window.clear(sf::Color(55, 138, 138, 1));

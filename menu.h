@@ -12,6 +12,7 @@ class Menu
     private:
         int selectedItemIndex;
         sf::Font font;
+        sf::Text title;
         sf::Text options[MAX_NUMBER_OF_ITEMS];
 
         void setOption(int opt_num, sf::Color& color, const std::string& string);
@@ -20,10 +21,8 @@ class Menu
         Menu();
         ~Menu() {}
 
+        bool processEvent(sf::Event& event);
         void draw(sf::RenderWindow& window);
-        void moveUp();
-        void moveDown();
-        int GetPressedItem() { return selectedItemIndex; }
         int run();
 
 };
