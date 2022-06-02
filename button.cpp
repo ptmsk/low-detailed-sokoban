@@ -58,7 +58,6 @@ bool Button::processEvent(const sf::Event& event)
     bool res = false;
     if (event.type == sf::Event::MouseButtonReleased)
     {
-        // const sf::Vector2f pos = _position;
         const sf::Vector2f size = getSize();
         sf::FloatRect rect;
         rect.left = _position.x;
@@ -67,14 +66,10 @@ bool Button::processEvent(const sf::Event& event)
         rect.height = size.y;
 
         if (rect.contains(event.mouseButton.x, event.mouseButton.y))
-        {
-            // onClick(event, *this);
             res = true;
-        }
     }
     else if (event.type == sf::Event::MouseMoved)
     {
-        // const sf::Vector2f pos = _position + parent_pos;
         const sf::Vector2f size = getSize();
         sf::FloatRect rect;
         rect.left = _position.x;

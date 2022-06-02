@@ -3,8 +3,7 @@
 
 Player::Player() : direction(sf::Vector2f(0.0, 0.0))
 {
-    if (!p_texture.loadFromFile("assets/images/player.png"))
-        std::cout << "player texture cannot load image.\n";
+    p_texture.loadFromFile("assets/images/player.png");
     
     p_sprite.setTexture(p_texture);
     p_sprite.setTextureRect(sf::IntRect(64, 0, SPRITESIZE, SPRITESIZE));

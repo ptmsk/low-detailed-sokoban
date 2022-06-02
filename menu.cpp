@@ -4,11 +4,7 @@
 
 Menu::Menu(): selectedItemIndex(-1)
 {
-    if (!font.loadFromFile("assets/font/arial.ttf"))
-    {
-        std::cout << "font can't be loaded!\n";
-    }
-
+    font.loadFromFile("assets/font/arial.ttf");
     title.setFont(font);
     title.setCharacterSize(100);
     title.setFillColor(sf::Color(255, 88, 74));
