@@ -2,7 +2,7 @@
 #include <fstream>
 #include <sstream>
 
-Level::Level() : structure(NULL), level(0), width(0), height(0), missing_target(0)
+Level::Level() : structure(NULL), level(0), width(0), height(0), missing_target(0), map_scale(sf::Transform::Identity)
 {
     texture.loadFromFile("assets/images/structure.png");
     l_vertices.setPrimitiveType(sf::Quads);
@@ -25,14 +25,23 @@ void Level::loadLevel(const int& level)
             delete [] structure[i];
         delete [] structure;
         missing_target = 0;
+
+        if (height > 9 || width > 15)
+        map_scale.scale(1 / MAP_SCALE, 1 / MAP_SCALE);
     }
+
     this->level = level;
+
     std::ifstream file("assets/level/level" + std::to_string(level) + ".txt");
     std::string line;
     std::getline(file, line);
     std::stringstream ss(line);
     ss >> height;
     ss >> width;
+
+    if (height > 9 || width > 15)
+        map_scale.scale(MAP_SCALE, MAP_SCALE);
+    
     structure = new int*[height];
     for (int i = 0; i < height; i++)
     {
@@ -58,8 +67,13 @@ void Level::loadLevel(const int& level)
 
 void Level::update()
 {
-    float posx_board = WINDOW_WIDTH / 2 - width * SPRITESIZE / 2.0f;
-    float posy_board = WINDOW_HEIGHT / 2 - height * SPRITESIZE / 2.0f;
+    float s = 1.0f;
+    if (height > 9 || width > 15)
+        s = MAP_SCALE;
+
+    float posx_board = WINDOW_WIDTH / 2.0f - width * SPRITESIZE * s / 2.0f;
+    float posy_board = WINDOW_HEIGHT / 2.0f - height * SPRITESIZE * s / 2.0f;
+
     l_vertices.resize(width * height * 4);
     for (int i = 0; i < width; i++)
     {
@@ -79,11 +93,15 @@ void Level::update()
             sf::Vertex *quad = &l_vertices[(i + j * width) * 4];
 
             // define 4 corners
+            // quad[0].position = sf::Vector2f(i * s * SPRITESIZE + posx_board, j * s * SPRITESIZE + posy_board);
+            // quad[1].position = sf::Vector2f((i + 1) * s * SPRITESIZE + posx_board, j * s * SPRITESIZE + posy_board);
+            // quad[2].position = sf::Vector2f((i + 1) * s * SPRITESIZE + posx_board, (j + 1) * s * SPRITESIZE + posy_board);
+            // quad[3].position = sf::Vector2f(i * s * SPRITESIZE + posx_board, (j + 1) * s * SPRITESIZE + posy_board);
+
             quad[0].position = sf::Vector2f(i * SPRITESIZE + posx_board, j * SPRITESIZE + posy_board);
             quad[1].position = sf::Vector2f((i + 1) * SPRITESIZE + posx_board, j * SPRITESIZE + posy_board);
             quad[2].position = sf::Vector2f((i + 1) * SPRITESIZE + posx_board, (j + 1) * SPRITESIZE + posy_board);
             quad[3].position = sf::Vector2f(i * SPRITESIZE + posx_board, (j + 1) * SPRITESIZE + posy_board);
-
 
             // define its 4 texture coordinates
             quad[0].texCoords = sf::Vector2f(tu * SPRITESIZE, tv * SPRITESIZE);
@@ -97,7 +115,8 @@ void Level::update()
 void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     //* apply the transform
-    states.transform *= getTransform();
+    // states.transform *= getTransform();
+    states.transform = map_scale;
 
     //* apply the tileset texture
     states.texture = &texture;

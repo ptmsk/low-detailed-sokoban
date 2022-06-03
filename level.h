@@ -15,6 +15,7 @@ class Level : public sf::Drawable, public sf::Transformable
         int missing_target;
         sf::Texture texture;
         sf::VertexArray l_vertices;
+        sf::Transform map_scale;
         sf::Vector2u player_position;
     
     public:
@@ -24,6 +25,7 @@ class Level : public sf::Drawable, public sf::Transformable
         ~Level();
         int getLevel() const { return level; }
         void loadLevel(const int& level);
+        bool isBig() { return (height > 9 || width > 15); }
         void update();
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
         const sf::Vector2u& getPlayerPosition() const { return player_position; }

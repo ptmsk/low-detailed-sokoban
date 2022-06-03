@@ -18,6 +18,7 @@ class Player : public sf::Drawable
         Player& operator=(const Player&) = delete;
         Player();
         void update(Level &level);
+        void scale(float x, float y) { p_sprite.scale(x, y); }
         void setOrigin(float x, float y) { p_sprite.setOrigin(-x, -y); }
         void setPosition(sf::Vector2u d);
         const sf::Vector2f& getPosition() const { return p_sprite.getPosition(); }

@@ -6,6 +6,7 @@ const int SPRITESIZE = 64;
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;
 const int LEVEL_NUM = 20;
+const float MAP_SCALE = 0.7f;
 
 // block
 const int GROUND = 0;

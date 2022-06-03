@@ -63,7 +63,7 @@ void Game::processEvents()
         }
         else if (event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved)
         {
-            for (int i = 0; i < BUTTON_NUM - 1; i++)
+            for (int i = 0; i < BUTTON_NUM; i++)
             {
                 if (buttons[i].processEvent(event))
                     status = Status(i);
@@ -113,9 +113,15 @@ void Game::run()
         title.setString("LEVEL " + std::to_string(l));
         title.setFillColor(sf::Color(255, 88, 74));
 
+        float s = 1.0f;
+        if (level.isBig())
+            s = MAP_SCALE;
+        player.scale(s, s);
+
         sf::Vector2u board_size = level.getSize();
-        float posx_board = WINDOW_WIDTH / 2 - board_size.x / 2.0f;
-        float posy_board = WINDOW_HEIGHT / 2 - board_size.y / 2.0f;
+        float posx_board = WINDOW_WIDTH / 2.0f - board_size.x * s / 2.0f;
+        float posy_board = WINDOW_HEIGHT / 2.0f - board_size.y * s / 2.0f;
+
         player.setOrigin(posx_board, posy_board);
         sf::Vector2u player_position = level.getPlayerPosition();
         player.setPosition(player_position);
@@ -140,5 +146,7 @@ void Game::run()
                 break;
             }
         }
+
+        player.scale(1 / s, 1 / s);
     }
 }
