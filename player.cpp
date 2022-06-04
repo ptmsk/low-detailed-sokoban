@@ -12,9 +12,7 @@ Player::Player() : direction(sf::Vector2f(0.0, 0.0))
 void Player::update(Level& level)
 {
     sf::Vector2u pos = level.getPlayerPosition();
-    float s = 1.0f;
-    if (level.isBig())
-        s = MAP_SCALE;
+    float s = level.createScale();
     p_sprite.setPosition(sf::Vector2f(pos.x * s * SPRITESIZE, pos.y * s * SPRITESIZE));
 }
 

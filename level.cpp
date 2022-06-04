@@ -26,8 +26,8 @@ void Level::loadLevel(const int& level)
         delete [] structure;
         missing_target = 0;
 
-        if (height > 9 || width > 15)
-        map_scale.scale(1 / MAP_SCALE, 1 / MAP_SCALE);
+        float s = createScale();
+        map_scale.scale(1 / s, 1 / s);
     }
 
     this->level = level;
@@ -39,8 +39,9 @@ void Level::loadLevel(const int& level)
     ss >> height;
     ss >> width;
 
-    if (height > 9 || width > 15)
-        map_scale.scale(MAP_SCALE, MAP_SCALE);
+
+    float s = createScale();
+    map_scale.scale(s, s);
     
     structure = new int*[height];
     for (int i = 0; i < height; i++)
@@ -65,11 +66,24 @@ void Level::loadLevel(const int& level)
     file.close();
 }
 
+
+float Level::createScale()
+{
+    if (!isBig())
+        return 1.0f;
+
+
+    float s_width = float(WINDOW_WIDTH) / (width * SPRITESIZE);
+    float s_height = (WINDOW_HEIGHT - 175.f) / (height * SPRITESIZE);
+
+    float s = (s_width < s_height) ? s_width : s_height;
+
+    return (s < 1.0f) ? s : 1.0f;
+}
+
 void Level::update()
 {
-    float s = 1.0f;
-    if (height > 9 || width > 15)
-        s = MAP_SCALE;
+    float s = createScale();
 
     float posx_board = WINDOW_WIDTH / 2.0f - width * SPRITESIZE * s / 2.0f;
     float posy_board = WINDOW_HEIGHT / 2.0f - height * SPRITESIZE * s / 2.0f;
@@ -93,11 +107,6 @@ void Level::update()
             sf::Vertex *quad = &l_vertices[(i + j * width) * 4];
 
             // define 4 corners
-            // quad[0].position = sf::Vector2f(i * s * SPRITESIZE + posx_board, j * s * SPRITESIZE + posy_board);
-            // quad[1].position = sf::Vector2f((i + 1) * s * SPRITESIZE + posx_board, j * s * SPRITESIZE + posy_board);
-            // quad[2].position = sf::Vector2f((i + 1) * s * SPRITESIZE + posx_board, (j + 1) * s * SPRITESIZE + posy_board);
-            // quad[3].position = sf::Vector2f(i * s * SPRITESIZE + posx_board, (j + 1) * s * SPRITESIZE + posy_board);
-
             quad[0].position = sf::Vector2f(i * SPRITESIZE + posx_board, j * SPRITESIZE + posy_board);
             quad[1].position = sf::Vector2f((i + 1) * SPRITESIZE + posx_board, j * SPRITESIZE + posy_board);
             quad[2].position = sf::Vector2f((i + 1) * SPRITESIZE + posx_board, (j + 1) * SPRITESIZE + posy_board);
@@ -115,7 +124,6 @@ void Level::update()
 void Level::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     //* apply the transform
-    // states.transform *= getTransform();
     states.transform = map_scale;
 
     //* apply the tileset texture

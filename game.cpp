@@ -109,13 +109,11 @@ void Game::run()
     {
         status = Status::Normal;
         level.loadLevel(l);
-
+        std::cout << "Ideal scale: " << level.createScale() << std::endl;
         title.setString("LEVEL " + std::to_string(l));
         title.setFillColor(sf::Color(255, 88, 74));
 
-        float s = 1.0f;
-        if (level.isBig())
-            s = MAP_SCALE;
+        float s = level.createScale();
         player.scale(s, s);
 
         sf::Vector2u board_size = level.getSize();
@@ -125,6 +123,7 @@ void Game::run()
         player.setOrigin(posx_board, posy_board);
         sf::Vector2u player_position = level.getPlayerPosition();
         player.setPosition(player_position);
+        player.setSprite(Direction::DOWN);
 
         while (window.isOpen())
         {
