@@ -11,9 +11,9 @@ Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-
     title.setStyle(sf::Text::Bold);
     title.setCharacterSize(32);
 
-    Button exit = Button("Exit");
-    Button play_again = Button("Play Again");
-    Button next_level = Button("Next level");
+    Button exit = Button("EXIT", font);
+    Button play_again = Button("PLAY AGAIN", font);
+    Button next_level = Button("NEXT LEVEL", font);
     buttons.push_back(exit);
     buttons.push_back(play_again);
     buttons.push_back(next_level);
@@ -63,7 +63,7 @@ void Game::processEvents()
         }
         else if (event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved)
         {
-            for (int i = 0; i < BUTTON_NUM; i++)
+            for (int i = 0; i < BUTTON_NUM - 1; i++)
             {
                 if (buttons[i].processEvent(event))
                     status = Status(i);
@@ -109,7 +109,6 @@ void Game::run()
     {
         status = Status::Normal;
         level.loadLevel(l);
-        std::cout << "Ideal scale: " << level.createScale() << std::endl;
         title.setString("LEVEL " + std::to_string(l));
         title.setFillColor(sf::Color(255, 88, 74));
 
@@ -136,14 +135,10 @@ void Game::run()
             else if (status == Status::Again)
             {
                 l--;
-                std::cout << "Play again\n";
                 break;
             }
             else if (status == Status::Next)
-            {
-                std::cout << "Next Level\n";
                 break;
-            }
         }
 
         player.scale(1 / s, 1 / s);
