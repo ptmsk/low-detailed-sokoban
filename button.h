@@ -12,7 +12,6 @@ class Button : public sf::Drawable
         int _status;
         sf::Vector2f _position;
         sf::RectangleShape _shape;
-        sf::Font _font;
         sf::Text _label;
         sf::Color _fillColor;
         sf::Color _outlineColor;
@@ -24,7 +23,7 @@ class Button : public sf::Drawable
         void onMouseLeft();
         
     public:
-        Button(const std::string& text);
+        Button(const std::string& text, const sf::Font& font);
         ~Button() {};
 
         void setPosition(const sf::Vector2f& pos) { _position = pos; }

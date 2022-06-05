@@ -1,9 +1,9 @@
 #include "button.h"
 
-Button::Button(const std::string& text): _status(Status::None)
+Button::Button(const std::string& text, const sf::Font& font): _status(Status::None)
 {
-    _font.loadFromFile("assets/font/arial.ttf");
-    _label.setFont(_font);
+    _label.setFont(font);
+    _label.setStyle(sf::Text::Bold);
     setText(text);
     setCharacterSize(20);
     setTextColor(sf::Color(180, 93, 23));
@@ -95,7 +95,7 @@ void Button::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
     states.transform.translate(_position);
     target.draw(_shape, states);
-    // target.draw(_label, states);
+    target.draw(_label, states);
 }
 
 void Button::onMouseEntered()
