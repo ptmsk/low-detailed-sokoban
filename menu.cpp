@@ -17,7 +17,7 @@ Menu::Menu(): selectedItemIndex(-1)
     float posy_title = (WINDOW_HEIGHT / 2.0f - rect.height / 2.0f) / (MAX_NUMBER_OF_ITEMS + 4) * 1.5f;
     title.setPosition(posx_title, posy_title);
     
-    std::string string[MAX_NUMBER_OF_ITEMS] = { "PLAY", "INSTRUCTION", "EXIT" };
+    std::string string[MAX_NUMBER_OF_ITEMS] = { "NEW GAME", "CONTINUE", "EXIT" };
     sf::Color color = sf::Color::White;
     for (int i = 0; i < MAX_NUMBER_OF_ITEMS; i++)
         setOption(i, color, string[i]);

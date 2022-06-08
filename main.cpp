@@ -14,7 +14,19 @@ int main()
     }
     else if (opt == 1)
     {
-        std::cout << "Instruction of the game or smthing\n";
+        std::cout << "Continue the last level you've played\n";
+
+        std::ifstream fin("assets/level/lastlevel.txt");
+
+        if (!fin.is_open())
+            std::cout << "Cannot open the file\n";
+
+        int level;
+        fin >> level;
+        fin.close();
+
+        Game game;
+        game.run(level);
     }
     else
         std::cout << "Quit the game!\n";

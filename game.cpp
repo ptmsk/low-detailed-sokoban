@@ -112,9 +112,9 @@ void Game::render()
     window.display();
 }
 
-void Game::run()
+void Game::run(const int& lastlevel)
 {   
-    for (int l = 1; l <= LEVEL_NUM; l++)
+    for (int l = lastlevel; l <= LEVEL_NUM; l++)
     {
         status = Status::Normal;
         level.loadLevel(l);
@@ -140,7 +140,18 @@ void Game::run()
             render();
 
             if (status == Status::Closed)
+            {
+                std::ofstream fout("assets/level/lastlevel.txt");
+
+                if (!fout.is_open())
+                    std::cout << "Cannot open the file\n";
+
+                fout << level.getLevel();
+
+                fout.close();
+
                 window.close();
+            }
             else if (status == Status::Again)
             {
                 l--;

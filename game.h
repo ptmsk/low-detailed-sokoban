@@ -28,7 +28,7 @@ class Game
         Game(const Game&) = delete;
         Game& operator=(const Game&) = delete;
         Game();
-        void run();
+        void run(const int& lastlevel = 1);
 };
 
 #endif
