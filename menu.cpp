@@ -4,9 +4,9 @@
 
 Menu::Menu(): selectedItemIndex(-1)
 {
-    font.loadFromFile("assets/font/arial.ttf");
+    font.loadFromFile("assets/font/Guava Candy.ttf");
     title.setFont(font);
-    title.setCharacterSize(100);
+    title.setCharacterSize(200);
     title.setFillColor(sf::Color(255, 88, 74));
     title.setOutlineColor(sf::Color::Black);
     title.setStyle(sf::Text::Bold);
@@ -14,7 +14,7 @@ Menu::Menu(): selectedItemIndex(-1)
 
     sf::FloatRect rect = title.getGlobalBounds();
     float posx_title = WINDOW_WIDTH / 2.0f - rect.width / 2.0f;
-    float posy_title = (WINDOW_HEIGHT / 2.0f - rect.height / 2.0f) / (MAX_NUMBER_OF_ITEMS + 2) * 1.5f;
+    float posy_title = (WINDOW_HEIGHT / 2.0f - rect.height / 2.0f) / (MAX_NUMBER_OF_ITEMS + 4) * 1.5f;
     title.setPosition(posx_title, posy_title);
     
     std::string string[MAX_NUMBER_OF_ITEMS] = { "PLAY", "INSTRUCTION", "EXIT" };
@@ -29,7 +29,7 @@ void Menu::setOption(int opt_num, sf::Color& color, const std::string& string)
     options[opt_num].setFont(font);
     options[opt_num].setFillColor(color);
     options[opt_num].setOutlineColor(sf::Color::Black);
-    options[opt_num].setCharacterSize(32);
+    options[opt_num].setCharacterSize(50);
     options[opt_num].setString(string);
 
     sf::FloatRect rect = options[opt_num].getGlobalBounds();

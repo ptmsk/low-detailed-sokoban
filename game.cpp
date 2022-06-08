@@ -4,12 +4,12 @@
 
 Game::Game() : window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Low-detailed-sokoban"), status(Status::Normal), player(), level() 
 {
-    font.loadFromFile("assets/font/arial.ttf");
+    font.loadFromFile("assets/font/Guava Candy.ttf");
 
     title.setFont(font);
     title.setOutlineColor(sf::Color::Black);
     title.setStyle(sf::Text::Bold);
-    title.setCharacterSize(32);
+    title.setCharacterSize(50);
 
     Button exit = Button("EXIT", font);
     Button play_again = Button("PLAY AGAIN", font);
@@ -61,7 +61,7 @@ void Game::processEvents()
                 player.setSprite(Direction::RIGHT);
             }
         }
-        else if (event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved)
+        else if ((event.type == sf::Event::MouseButtonReleased || event.type == sf::Event::MouseMoved))
         {
             for (int i = 0; i < BUTTON_NUM - 1; i++)
             {
@@ -69,7 +69,7 @@ void Game::processEvents()
                     status = Status(i);
             }
             
-            if (level.isFinished() && buttons[BUTTON_NUM - 1].processEvent(event))
+            if (level.isFinished() && !level.isFinalLevel() && buttons[BUTTON_NUM - 1].processEvent(event))
                 status = Status::Next;
         }
     }
@@ -90,10 +90,19 @@ void Game::render()
 
     if (level.isFinished())
     {
-        title.setString("LEVEL " + std::to_string(level.getLevel()) + " - COMPLETED");
-        title.setFillColor(sf::Color::Yellow); 
+        if (level.isFinalLevel())
+        {
+            title.setString("GAME OVER! YOU GUY ARE SO AMAZING >:D");
+            title.setFillColor(sf::Color(40, 254, 68));
+        }
+        else
+        {
+            title.setString("LEVEL " + std::to_string(level.getLevel()) + " - COMPLETED");
+            title.setFillColor(sf::Color::Yellow); 
+        }
         
-        window.draw(buttons[BUTTON_NUM - 1]);
+        if (!level.isFinalLevel())
+            window.draw(buttons[BUTTON_NUM - 1]);
     }
 
     window.draw(title);

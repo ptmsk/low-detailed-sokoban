@@ -26,6 +26,7 @@ class Level : public sf::Drawable, public sf::Transformable
         int getLevel() const { return level; }
         void loadLevel(const int& level);
         bool isBig() { return (height > 8 || width > 13); }
+        bool isFinalLevel() { return level == LEVEL_NUM; }
         float createScale();
         void update();
         void draw(sf::RenderTarget& target, sf::RenderStates states) const;
