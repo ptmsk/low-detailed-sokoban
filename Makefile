@@ -4,4 +4,4 @@ compile:
 	g++ -Isrc/include -c main.cpp
 
 link:
-	g++ main.o -o main -Lsrc/lib -lsfml-graphics -lsfml-window -lsfml-system -lopengl32 -lglu32
+	g++ main.o -o main -Lsrc/lib -lsfml-graphics -lsfml-window -lsfml-system -lopengl32 -lglu32 -mwindows
